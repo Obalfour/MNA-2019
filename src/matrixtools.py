@@ -24,9 +24,9 @@ def gramschmidt(matrix):
             A[:, j] = A[:, j] - R[i, j] * q
     return Q, R
 
-# Same example as wikipedia
-matrix = numpy.array([[12, -51, 4], [6, 167, -68], [-4, 24, -41]])
-pprint.pprint(matrix)
-[q,r] = gramschmidt(matrix)
-pprint.pprint(q)
-pprint.pprint(r)
+# Same example as wikipedia for testing
+# matrix = numpy.array([[12, -51, 4], [6, 167, -68], [-4, 24, -41]])
+# pprint.pprint(matrix)
+# [q,r] = gramschmidt(matrix)
+# pprint.pprint(q)
+# pprint.pprint(r)
