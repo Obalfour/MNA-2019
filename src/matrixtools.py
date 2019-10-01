@@ -56,6 +56,7 @@ def houseHolder(matrix):
 
     for i in range(n):
 
+        #find H = I-bvv'
         normx = np.linalg.norm(R[i:, i])
         # grabs columns, from the diagonal down 
         x = R[i:, i]
@@ -67,7 +68,9 @@ def houseHolder(matrix):
         v[0] = 1
         b = np.divide(np.multiply(np.multiply(-1,p),u), normx)
 
+        # R = HR
         R[i:, :] = R[i:, :] - np.multiply(b,np.outer(v, v).dot(R[i:, :]))
+        # Q = QH
         Q[:, i:] = Q[:, i:] - np.multiply(b,Q[:, i:].dot(np.outer(v, v)))
 
         #print(Q)
