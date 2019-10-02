@@ -9,8 +9,8 @@ HORIZONTAL = config.getint("Size", "HORIZONTAL")
 VERTICAL = config.getint("Size", "VERTICAL")
 
 # [Figure]
-PICTURES_PER_PERSON = config.getint("Figure", "PICTURES_PER_PERSON")
-NO_PEOPLE = config.getint("Figure", "NO_PEOPLE")
+FIGURES_PER_PERSON = config.getint("Figure", "FIGURES_PER_PERSON")
+PEOPLE_NO = config.getint("Figure", "PEOPLE_NO")
 FIGURE_PATH = config.get("Figure", "FIGURE_PATH")	# Path to the directory with the faces
 
 # [Training]
@@ -23,3 +23,11 @@ METHOD = config.get("Method", "METHOD")
 # [Test]
 QUERY = config.get("Test", "QUERY")
 EIGEN_FACES = config.getint("Test", "EIGEN_FACES")
+
+
+trainFigures, testFigures, trainingNames, testNames = getImages(FIGURE_PATH, VERTICAL, HORIZONTAL, FIGURES_PER_PERSON, PEOPLE_NO, TRAINING_NO, TEST_NO)
+
+print(trainFigures)
+print(testFigures)
+print(trainingNames)
+print(testNames)
