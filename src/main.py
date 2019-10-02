@@ -26,7 +26,7 @@ QUERY = config.get("Test", "QUERY")
 EIGEN_FACES = config.getint("Test", "EIGEN_FACES")
 
 
-trainFigures, testFigures, trainingNames, testNames = getImages(FIGURE_PATH, VERTICAL, HORIZONTAL, FIGURES_PER_PERSON, PEOPLE_NO, TRAINING_NO, TEST_NO)
+trainFigures, testFigures, trainingNames, testNames = getImages(FIGURE_PATH, HORIZONTAL, VERTICAL, FIGURES_PER_PERSON, PEOPLE_NO, TRAINING_NO, TEST_NO)
 
 print(trainFigures)
 print(testFigures)
