@@ -1,5 +1,6 @@
 # for python3 use configparser, it has been changed from one version to another
-import ConfigParser as configparser
+import configparser
+from utils import *
 
 config = configparser.ConfigParser()
 config.read("./configFile.ini")

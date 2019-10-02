@@ -1,4 +1,5 @@
 import os 
+import scipy
 from scipy import ndimage as im
 import numpy as np
 
