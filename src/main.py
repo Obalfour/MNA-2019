@@ -25,10 +25,40 @@ METHOD = config.get("Method", "METHOD")
 QUERY = config.get("Test", "QUERY")
 EIGEN_FACES = config.getint("Test", "EIGEN_FACES")
 
+training = TRAINING_NO * PEOPLE_NO
+test = TEST_NO * PEOPLE_NO
 
 trainFigures, testFigures, trainingNames, testNames = getImages(FIGURE_PATH, HORIZONTAL, VERTICAL, FIGURES_PER_PERSON, PEOPLE_NO, TRAINING_NO, TEST_NO)
 
-print(trainFigures)
-print(testFigures)
-print(trainingNames)
-print(testNames)
+# KERNEL 
+if METHOD == 'KPCA':
+
+	#Polinomial of 2 degree
+	degree = 2
+    A = (np.dot(tralinFigures, trainFigures.T) / training + 1) ** degree
+
+    # esta transformación es equivalente a centrar las imágenes originales... 
+    # hacemos el test y el entrenamiento a la vez, para obtener el resultado final
+    unoM = np.ones([training, training]) / training
+    unoMTest = np.ones([test, training]) / training
+    A = A - np.dot(unoM, A) - np.dot(A, unoM) + np.dot(unoM, np.dot(A, unoM))
+
+    Atest = (np.dot(testFigures, trainFigures.T) / training + 1) ** degree
+    Atest = Atest - np.dot(unoMTest, A) - np.dot(Atest, unoMTest) + np.dot(unoMTest, np.dot(A, unoM))
+
+    # Autovalores y autovectores
+    w, alpha = my_eig(A)
+    lambdas = w
+
+    for col in range(alpha.shape[1]):
+        alpha[:, col] = alpha[:, col] / np.sqrt(lambdas[col])
+
+    # pre-proyección
+    improypre = np.dot(A.T, alpha)
+    improypreTest = np.dot(Atest, alpha)
+    
+    nmax = alpha.shape[1]
+    accs = np.zeros([nmax, 1])
+
+
+
