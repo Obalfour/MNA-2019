@@ -88,7 +88,7 @@ def iterate_QR(matrix):
         Q,R = householder(A)
         A = R.dot(Q)
         new_eigenvectors = eigenvectors.dot(Q)
-        if np.linalg.norm(np.subtract(new_eigenvectors, eigenvectors)) < MAX_ITERATIONS:
+        if np.linalg.norm(np.subtract(new_eigenvectors, eigenvectors)) < MAX_PRECISION:
             break
         eigenvectors = new_eigenvectors
 
