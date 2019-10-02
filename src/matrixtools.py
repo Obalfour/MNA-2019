@@ -3,11 +3,13 @@ import pprint
 import numpy
 import numpy as np
 
+MAX_ITERATIONS = 100
+MAX_PRECISION = 10 ** -4
 
 # el proceso de Gram-Schmidt se utiliza para ortonormalizar
 # las columnas de una matriz
 # https://es.wikipedia.org/wiki/Factorizaci%C3%B3n_QR#Mediante_el_m%C3%A9todo_de_ortogonalizaci%C3%B3n_de_Gram-Schmidt
-def gramschmidt(matrix):
+def gram_schmidt(matrix):
     m, n = matrix.shape
     # Initialize matrix with zeros
     Q = np.zeros((m, n))
@@ -31,7 +33,7 @@ def gramschmidt(matrix):
 # pprint.pprint(q)
 # pprint.pprint(r)
 
-def houseHolder(matrix):
+def householder(matrix):
     ##### WHAT IF WE HAVE A 0 IN X[O] ?? ##### 
 
     # 'a' must be square
@@ -77,5 +79,34 @@ def houseHolder(matrix):
         #print(R)
 
     return Q,R
+
+def iterate_QR(matrix):
+    eigenvectors = np.identity(matrix.shape[0])
+    A = np.copy(matrix)
+
+    for i in range(MAX_ITERATIONS):
+        Q,R = householder(A)
+        A = R.dot(Q)
+        new_eigenvectors = eigenvectors.dot(Q)
+        if np.linalg.norm(np.subtract(new_eigenvectors, eigenvectors)) < MAX_ITERATIONS:
+            break
+        eigenvectors = new_eigenvectors
+
+    eigenvalues = np.diag(A)
+
+    sort = np.argsort(np.absolute(eigenvalues))[::1]
+#    pprint.pprint(eigenvalues[sort])
+#    pprint.pprint(eigenvectors[sort])
+    return eigenvalues[sort], eigenvectors[sort]
+
+# Compute the eigenvalues and right eigenvectors of a square array
+def my_eig(matrix):
+    m, n = matrix.shape
+    if not m == n:
+        raise AttributeError("The matrix must be squared")
+    else:
+        return iterate_QR(matrix)
+
+# my_eig(np.diag((1, 2, 3)))
 
 
