@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm
 
+from matrixtools import *
+
 mypath      = '../att_faces/'
 onlydirs    = [f for f in listdir(mypath) if isdir(join(mypath, f))]
 
@@ -62,13 +64,8 @@ K = K - np.dot(unoM,K) - np.dot(K,unoM) + np.dot(unoM,np.dot(K,unoM))
 
 
 #Autovalores y autovectores
-w,alpha = np.linalg.eigh(K)
-lambdas = w/trnno
+w,alpha = descending_eig(K)
 lambdas = w
-
-#Los autovalores vienen en orden descendente. Lo cambio 
-lambdas = np.flipud(lambdas)
-alpha   = np.fliplr(alpha)
 
 for col in range(alpha.shape[1]):
     alpha[:,col] = alpha[:,col]/np.sqrt(lambdas[col])
