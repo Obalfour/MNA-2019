@@ -34,6 +34,7 @@ EIGEN_FACES = config.getint("Test", "EIGEN_FACES") #60
 clf = svm.LinearSVC()
 # TRAINING
 
+print("Starting image recognition, wait until you are asked to write the image path")
 images_training, person_training, names = openImages(IMAGE_PATH, PEOPLE_NO, TRAINING_NO, HORIZONTAL*VERTICAL)
 if METHOD == 'KPCA':
     images_training *= 255.0
