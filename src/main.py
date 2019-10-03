@@ -34,38 +34,11 @@ METHOD = config.get("Method", "METHOD")
 QUERY = config.get("Test","QUERY")
 EIGEN_FACES = config.getint("Test", "EIGEN_FACES") #60
 
-
-#parser = argparse.ArgumentParser(description='Facial recognition system.')
-#parser.add_argument("--kernel", "-k", help="Uses KPCA", action="store_true",
-#                    default=False)
-# parser.add_argument("--faces_directory", help="Path to the directory with the faces.", action="store",
-#                     default='./../att_faces/')
-# parser.add_argument("--face_test_directory", help="Path to the directory with the faces to test.", action="store",
-#                     default='./../att_faces/')
-# parser.add_argument("--eigenfaces", help="How many eigenfaces are used.", action="store", default=50)
-# parser.add_argument("--training", help="How many photos used for training out of 10.", action="store",
-#                     choices=[1,2,3,4,5,6,7,8,9,10], type=int, default=6)
-# args = parser.parse_args()
-
-mypath = FIGURE_PATH
-
-#image size
-horsize     = HORIZONTAL
-versize     = VERTICAL
-areasize    = HORIZONTAL*VERTICAL
-
-#number of figures
-# personno    = PEOPLE_NO
-trnperper   = TRAINING_NO
-tstperper   = 10 - TRAINING_NO
-trnno = PEOPLE_NO * trnperper
-tstno = PEOPLE_NO * tstperper
-
 clf = svm.LinearSVC()
 #clf = GradientBoostingClassifier()
 # TRAINING
 
-images_training, person_training, names_dictionary = openImages(path=mypath, personno=PEOPLE_NO, trnperper=trnperper, areasize=areasize)
+images_training, person_training, names_dictionary = openImages(FIGURE_PATH, PEOPLE_NO, TRAINING_NO, HORIZONTAL*VERTICAL)
 if METHOD == 'KPCA':
     images_training *= 255.0
     images_training -= 127.5
@@ -73,9 +46,9 @@ if METHOD == 'KPCA':
 
     # KERNEL: polinomial de grado degree
     degree = 2
-    K = (np.dot(images_training, images_training.T) / trnno + 1) ** degree
+    K = (np.dot(images_training, images_training.T) / (PEOPLE_NO * TRAINING_NO) + 1) ** degree
     # esta transformación es equivalente a centrar las imágenes originales...
-    unoM = np.ones([trnno, trnno]) / trnno
+    unoM = np.ones([(PEOPLE_NO * TRAINING_NO), (PEOPLE_NO * TRAINING_NO)]) / (PEOPLE_NO * TRAINING_NO)
     K = K - np.dot(unoM, K) - np.dot(K, unoM) + np.dot(unoM, np.dot(K, unoM))
     # Autovalores y autovectores
     w, alpha = descending_eig(K)
@@ -108,14 +81,14 @@ while(True):
     print("Input face path")
     picture_path = stdin.readline().rstrip().split()[0]
     if METHOD == 'KPCA':
-        a = np.reshape((imageio.imread(test_path + picture_path + '.pgm') - 127.5) / 127.5, [1, areasize])
-        unoML = np.ones([1, trnno]) / trnno
-        Ktest = (np.dot(a, images_training.T) / trnno + 1) ** degree
+        a = np.reshape((imageio.imread(test_path + picture_path + '.pgm') - 127.5) / 127.5, [1, VERTICAL*HORIZONTAL])
+        unoML = np.ones([1, (PEOPLE_NO * TRAINING_NO)]) / (PEOPLE_NO * TRAINING_NO)
+        Ktest = (np.dot(a, images_training.T) / (PEOPLE_NO * TRAINING_NO) + 1) ** degree
         Ktest = Ktest - np.dot(unoML, K) - np.dot(Ktest, unoM) + np.dot(unoML, np.dot(K, unoM))
         imtstproypre = np.dot(Ktest, alpha)
         proy_test = imtstproypre[:, 0:EIGEN_FACES]
     else:
-        a = np.reshape(imageio.imread(test_path + picture_path + '.pgm') / 255.0, [1, areasize])
+        a = np.reshape(imageio.imread(test_path + picture_path + '.pgm') / 255.0, [1, VERTICAL*HORIZONTAL])
         a -= meanimage
         proy_test = np.dot(a, B.T)
     prediction = clf.predict(proy_test)
