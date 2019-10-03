@@ -1,6 +1,5 @@
 import pprint
 
-import numpy
 import numpy as np
 
 MAX_ITERATIONS = 100
@@ -20,7 +19,7 @@ def gram_schmidt(matrix):
         Q[:, i] = v / norm
         R[i, i] = norm
         for j in range(i+1,n):
-            q = numpy.transpose(Q[:, i])
+            q = np.transpose(Q[:, i])
             R[i, j] = q.dot(A[:, j])
             A[:, j] = A[:, j] - R[i, j] * q
     return Q, R
@@ -110,4 +109,17 @@ def descending_eig(matrix):
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.eig.html
 # descending_eig(np.diag((1, 2, 3)))
 
+# Compute Singular Value Decomposition
+# http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
+def my_svd(matrix):
+# Calculating the SVD consists of finding the eigenvalues and eigenvectors of AAT and ATA.
+        W = matrix.dot(np.transpose(matrix))
+        S, U = descending_eig(W)
+        S = np.sqrt(np.abs(S))
+        V = np.transpose(matrix).dot(U)
+        S1 = np.diag(S)
+        for k in range(S1.shape[0]):
+            S1[k,k] = 1/S1[k,k]
 
+        V = V.dot(S1)
+        return S, np.asmatrix(V.T)
