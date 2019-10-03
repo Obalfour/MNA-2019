@@ -1,3 +1,4 @@
+#python3 -W ignore main.py
 from os import listdir
 from os.path import join, isdir
 import numpy as np
