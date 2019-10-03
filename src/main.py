@@ -67,7 +67,7 @@ else:
     images_training = [images_training[k, :] - meanimage for k in range(images_training.shape[0])]
     # PCA
     images_training = np.asarray(images_training)
-    eigen_values, V = rsvAndEigenValues(images_training)
+    eigen_values, V = my_svd(images_training)
 
     B = V[0:EIGEN_FACES, :]
     proy_training = np.dot(images_training, B.T)

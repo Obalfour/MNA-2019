@@ -112,33 +112,14 @@ def descending_eig(matrix):
 # Compute Singular Value Decomposition
 # http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
 def my_svd(matrix):
-    m, n = matrix.shape
 # Calculating the SVD consists of finding the eigenvalues and eigenvectors of AAT and ATA.
-    W = matrix.dot(np.transpose(matrix))
-    S, U = descending_eig(W)
-    S = np.sqrt(np.abs(S))
-    V = np.transpose(matrix).dot(U)
-    S1 = np.diagonal(S)
-    for k in range(S1.shape[0]):
-            S1[k,k] = 1/S1[k,k]
-
-            V = V.dot(S1)
-            return S, np.asmatrix(V.T)
-
-def rsvAndEigenValues(A):
-    m,n = A.shape
-    if n > m:
-        aux = A.dot(A.T)
-        S, U = descending_eig(aux)
-        S = np.sqrt(abs(S))
-        V = A.T.dot(U)
+        W = matrix.dot(np.transpose(matrix))
+        S, U = descending_eig(W)
+        S = np.sqrt(np.abs(S))
+        V = np.transpose(matrix).dot(U)
         S1 = np.diag(S)
         for k in range(S1.shape[0]):
             S1[k,k] = 1/S1[k,k]
 
         V = V.dot(S1)
         return S, np.asmatrix(V.T)
-    aux = A.T.dot(A)
-    S,V = descending_eig(aux)
-    S = np.sqrt(S)
-    return S, np.asmatrix(V)
