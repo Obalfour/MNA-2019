@@ -22,8 +22,8 @@ areasize    = horsize*versize
 
 #number of figures
 personno    = 40
-trnperper   = 9
-tstperper   = 1
+trnperper   = 6
+tstperper   = 4
 trnno       = personno*trnperper
 tstno       = personno*tstperper
 
@@ -39,6 +39,8 @@ for dire in onlydirs:
         person[imno,0] = per
         imno += 1
     per += 1
+    if per >= personno:
+        break
 
 #TEST SET
 imagetst  = np.zeros([tstno,areasize])
@@ -52,6 +54,8 @@ for dire in onlydirs:
         persontst[imno,0] = per
         imno += 1
     per += 1
+    if per >= personno:
+        break
 
 #KERNEL: polinomial de grado degree
 degree = 2
@@ -86,8 +90,7 @@ imtstproypre= np.dot(Ktest,alpha)
 #improypre = kpca.transform(images)
 #imtstproypre = kpca.transform(imagetst)
 
-nmax = alpha.shape[1]
-nmax = 100
+nmax = 80
 accs = np.zeros([nmax,1])
 for neigen in range(1,nmax):
     #Me quedo sólo con las primeras autocaras   
@@ -102,9 +105,10 @@ for neigen in range(1,nmax):
     accs[neigen] = clf.score(imtstproy,persontst.ravel())
     print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen]*100))
 
+plt.figure()
 fig, axes = plt.subplots(1,1)
 axes.semilogy(range(nmax),(1-accs)*100)
 axes.set_xlabel('No. autocaras')
 axes.grid(which='Both')
 fig.suptitle('Error')
-
+plt.show()

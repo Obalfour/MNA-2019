@@ -9,6 +9,8 @@ from os.path import join, isdir
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm
+from matrixtools import *
+from utils import *
 
 mypath      = '../att_faces/'
 onlydirs    = [f for f in listdir(mypath) if isdir(join(mypath, f))]
@@ -37,6 +39,8 @@ for dire in onlydirs:
         person[imno,0] = per
         imno += 1
     per += 1
+    if per >= personno:
+        break
 
 #TEST SET
 imagetst  = np.zeros([tstno,areasize])
@@ -50,7 +54,8 @@ for dire in onlydirs:
         persontst[imno,0] = per
         imno += 1
     per += 1
-
+    if per >= personno:
+        break
 
     
 #CARA MEDIA
@@ -64,27 +69,11 @@ images  = [images[k,:]-meanimage for k in range(images.shape[0])]
 imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
 #PCA
-U,S,V = np.linalg.svd(images,full_matrices = False)
-
-#Primera autocara...
-eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
-fig, axes = plt.subplots(1,1)
-axes.imshow(eigen1,cmap='gray')
-fig.suptitle('Primera autocara')
-
-eigen2 = (np.reshape(V[1,:],[versize,horsize]))*255
-fig, axes = plt.subplots(1,1)
-axes.imshow(eigen2,cmap='gray')
-fig.suptitle('Segunda autocara')
-
-eigen3 = (np.reshape(V[2,:],[versize,horsize]))*255
-fig, axes = plt.subplots(1,1)
-axes.imshow(eigen2,cmap='gray')
-fig.suptitle('Tercera autocara')
+images = np.asarray(images)
+eigen_values,V = my_svd(images)
 
 
-nmax = V.shape[0]
-nmax = 100
+nmax = 120
 accs = np.zeros([nmax,1])
 for neigen in range(1,nmax):
     #Me quedo sólo con las primeras autocaras
@@ -105,4 +94,5 @@ axes.semilogy(range(nmax),(1-accs)*100)
 axes.set_xlabel('No. autocaras')
 axes.grid(which='Both')
 fig.suptitle('Error')
+plt.show()
 
