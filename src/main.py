@@ -52,7 +52,7 @@ if METHOD == 'KPCA':
     w, alpha = descending_eig(K)
     lambdas = w
     for col in range(alpha.shape[1]):
-        alpha[:, col] = alpha[:, col] / np.sqrt(lambdas[col])
+        alpha[:, col] = alpha[:, col] / np.sqrt(abs(lambdas[col]))
 
     # pre-proyección
     improypre = np.dot(K.T, alpha)
