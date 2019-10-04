@@ -2,11 +2,11 @@
 
 Assignment about implementing a facial recognition software.
 
-## Instalar librerias externas necesarias
+## Install libraries
 pip3 install -r requirements.txt
 
-## Ejecutar
-Para realizar algun cambio sobre las configuraciones, entrar a configFile.ini
+## Execute
+To make any changes in the configurations, go to configFile.ini
 
 python3 -W ignore main.py
 
